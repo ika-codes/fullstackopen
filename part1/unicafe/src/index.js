@@ -1,11 +1,28 @@
 import React, { useState } from "react";
 import ReactDOM from "react-dom";
 
-const Display = props => (
-	<div>
+const Statistic = props => (
+	<p>
 		{props.text} {props.value}
-	</div>
+	</p>
 );
+
+const Statistics = props => {
+	if (props.total === 0) {
+		return <div>the app is used by pressing the buttons</div>;
+	}
+
+	return (
+		<div>
+			<Statistic text="good" value={props.good} />
+			<Statistic text="neutral" value={props.neutral} />
+			<Statistic text="bad" value={props.bad} />
+			<Statistic text="all" value={props.total} />
+			<Statistic text="average" value={props.average} />
+			<Statistic text="positive" value={props.positive} />
+		</div>
+	);
+};
 
 const Button = props => (
 	<button onClick={props.handleClick}>{props.text}</button>
@@ -23,6 +40,10 @@ const App = () => {
 
 	const increaseBad = () => setBad(bad + 1);
 
+	const total = good + neutral + bad;
+	const average = (good - bad) / total;
+	const positive = (good / total) * 100 + "%";
+
 	return (
 		<div>
 			<h1>give feedback</h1>
@@ -30,9 +51,14 @@ const App = () => {
 			<Button handleClick={increaseNeutral} text="neutral" />
 			<Button handleClick={increaseBad} text="bad" />
 			<h1>statistics</h1>
-			<Display text="good" value={good} />
-			<Display text="neutral" value={neutral} />
-			<Display text="bad" value={bad} />
+			<Statistics
+				total={total}
+				good={good}
+				neutral={neutral}
+				bad={bad}
+				average={average}
+				positive={positive}
+			/>
 		</div>
 	);
 };
