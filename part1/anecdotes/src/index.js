@@ -5,18 +5,52 @@ const Button = props => (
 	<button onClick={props.handleClick}>{props.text}</button>
 );
 
+const Votes = props => <p>has {props.votes} votes</p>;
+
+const MostVotes = props => {
+	return (
+		<div>
+			<h1>Anecdote with most votes</h1>
+			<p>{props.anecdotes[props.best]}</p>
+			<p>has {props.votes} votes</p>
+		</div>
+	);
+};
+
 const App = props => {
+	const pointsArray = Array.apply(null, new Array(anecdotes.length)).map(
+		Number.prototype.valueOf,
+		0
+	);
+
 	const [selected, setSelected] = useState(0);
+	const [points, setPoints] = useState(pointsArray);
 
 	const selectRandom = () => {
 		const randomNumber = Math.floor(Math.random() * anecdotes.length);
 		return setSelected(randomNumber);
 	};
 
+	const voteAnecdote = () => {
+		const copy = [...points];
+		copy[selected] += 1;
+		setPoints(copy);
+	};
+
+	const best = points.indexOf(Math.max(...points));
+
 	return (
 		<div>
+			<h1>Anecdote of the day</h1>
 			<p>{props.anecdotes[selected]}</p>
+			<Votes votes={points[selected]} />
+			<Button text="vote" handleClick={voteAnecdote} />
 			<Button text="next anecdote" handleClick={selectRandom} />
+			<MostVotes
+				best={best}
+				anecdotes={props.anecdotes}
+				votes={points[best]}
+			/>
 		</div>
 	);
 };
