@@ -1,31 +1,14 @@
 import React, { useState } from "react";
-import Entry from "./components/Entry";
+
+import Filter from "./components/Filter";
+import PersonForm from "./components/PersonForm";
+import Persons from "./components/Persons";
 
 const App = props => {
     const [persons, setPersons] = useState(props.entries);
     const [newName, setNewName] = useState("");
     const [newNumber, setNewNumber] = useState("");
     const [newSearch, setNewSearch] = useState("");
-
-    const rows = () => {
-        if (newSearch.length > 0) {
-            let isMatch = persons.filter(function(entry) {
-                return (
-                    entry.name
-                        .toLowerCase()
-                        .includes(newSearch.toLowerCase()) === true
-                );
-            });
-
-            return isMatch.map(entry => (
-                <Entry key={entry.name} entry={entry} />
-            ));
-        } else {
-            return persons.map(entry => (
-                <Entry key={entry.name} entry={entry} />
-            ));
-        }
-    };
 
     const addPerson = event => {
         event.preventDefault();
@@ -61,24 +44,17 @@ const App = props => {
     return (
         <div>
             <h2>Phonebook</h2>
-            <div>
-                <input value={newSearch} onChange={handleSearchChange} />
-            </div>
+            <Filter value={newSearch} onChange={handleSearchChange} />
             <h2>Add new entry</h2>
-            <form onSubmit={addPerson}>
-                <div>
-                    name: <input value={newName} onChange={handleNameChange} />
-                </div>
-                <div>
-                    number:{" "}
-                    <input value={newNumber} onChange={handleNumberChange} />
-                </div>
-                <div>
-                    <button type="submit">add</button>
-                </div>
-            </form>
+            <PersonForm
+                onSubmit={addPerson}
+                nameValue={newName}
+                nameOnChange={handleNameChange}
+                numberValue={newNumber}
+                numberOnChange={handleNumberChange}
+            />
             <h2>Numbers</h2>
-            <ul>{rows()}</ul>
+            <Persons newSearch={newSearch} persons={persons} />
         </div>
     );
 };
