@@ -21,6 +21,13 @@ const Content = props => {
     return <div>{rows()}</div>;
 };
 
+const Courses = props => {
+    const { courses } = props;
+    const courseRows = () =>
+        courses.map(course => <Course key={course.id} course={course} />);
+    return <div>{courseRows()}</div>;
+};
+
 const Course = props => (
     <div>
         <Header title={props.course.name} />
@@ -30,45 +37,59 @@ const Course = props => (
 );
 
 const App = () => {
-    const course = {
-        name: "Half Stack application development",
-        parts: [
-            {
-                name: "Fundamentals of React",
-                exercises: 10,
-                id: 1
-            },
-            {
-                name: "Using props to pass data",
-                exercises: 7,
-                id: 2
-            },
-            {
-                name: "State of a component",
-                exercises: 14,
-                id: 3
-            },
-            {
-                name: "Redux",
-                exercises: 11,
-                id: 4
-            },
-            {
-                name: "MongoDB",
-                exercises: 3,
-                id: 5
-            },
-            {
-                name: "Express",
-                exercises: 8,
-                id: 6
-            }
-        ]
-    };
+    const courses = [
+        {
+            name: "Half Stack application development",
+            id: 1,
+            parts: [
+                {
+                    name: "Fundamentals of React",
+                    exercises: 10,
+                    id: 1
+                },
+                {
+                    name: "Using props to pass data",
+                    exercises: 7,
+                    id: 2
+                },
+                {
+                    name: "State of a component",
+                    exercises: 14,
+                    id: 3
+                },
+                {
+                    name: "Redux",
+                    exercises: 11,
+                    id: 4
+                }
+            ]
+        },
+        {
+            name: "Node.js",
+            id: 2,
+            parts: [
+                {
+                    name: "Routing",
+                    exercises: 3,
+                    id: 1
+                },
+                {
+                    name: "Middlewares",
+                    exercises: 7,
+                    id: 2
+                },
+                {
+                    name: "Express",
+                    exercises: 12,
+                    id: 3
+                }
+            ]
+        }
+    ];
 
     return (
         <div>
-            <Course course={course} />
+            <Courses courses={courses} />
         </div>
     );
 };
