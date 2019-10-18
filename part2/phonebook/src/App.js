@@ -10,12 +10,18 @@ const App = props => {
 
     const addPerson = event => {
         event.preventDefault();
-        const personObject = {
-            name: newName,
-            number: ""
-        };
-        setPersons(persons.concat(personObject));
-        setNewName("");
+        let checkName = persons.filter(x => x.name === newName);
+
+        if (checkName.length === 0) {
+            const personObject = {
+                name: newName,
+                number: ""
+            };
+            setPersons(persons.concat(personObject));
+            setNewName("");
+        } else {
+            window.alert(`${newName} is already added to phonebook`);
+        }
     };
 
     const handleNameChange = event => {
