@@ -37,6 +37,14 @@ const App = () => {
         }
     };
 
+    const deletePerson = id => {
+        if (window.confirm("Do you really want to delete this entry?")) {
+            personsService.deleteEntry(id).then(() => {
+                setPersons(persons.filter(n => n.id !== id));
+            });
+        }
+    };
+
     const handleNameChange = event => {
         setNewName(event.target.value);
     };
@@ -47,6 +55,10 @@ const App = () => {
 
     const handleSearchChange = event => {
         setNewSearch(event.target.value);
+    };
+
+    const handleDeletePersonOf = id => {
+        deletePerson(id);
     };
 
     return (
@@ -62,7 +74,11 @@ const App = () => {
                 numberOnChange={handleNumberChange}
             />
             <h2>Numbers</h2>
-            <Persons newSearch={newSearch} persons={persons} />
+            <Persons
+                newSearch={newSearch}
+                persons={persons}
+                handleDeletePersonOf={handleDeletePersonOf}
+            />
         </div>
     );
 };

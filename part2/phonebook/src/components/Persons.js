@@ -11,10 +11,22 @@ const Persons = props => {
             );
         });
 
-        return isMatch.map(entry => <Entry key={entry.name} entry={entry} />);
+        return isMatch.map(entry => (
+            <Entry
+                key={entry.id}
+                entry={entry}
+                handleDeletePerson={() => props.handleDeletePersonOf(entry.id)}
+            />
+        ));
     } else {
         return props.persons.map(entry => (
-            <Entry key={entry.name} entry={entry} />
+            <Entry
+                key={entry.id}
+                entry={entry}
+                handleDeletePerson={e =>
+                    props.handleDeletePersonOf(e, entry.id)
+                }
+            />
         ));
     }
 };
