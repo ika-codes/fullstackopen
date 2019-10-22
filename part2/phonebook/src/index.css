@@ -12,3 +12,19 @@ code {
     font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
         monospace;
 }
+
+.success {
+    color: green;
+    font-style: italic;
+    font-size: 16px;
+    border: 1px solid green;
+    padding: 10px;
+}
+
+.error {
+    color: red;
+    font-style: italic;
+    font-size: 16px;
+    border: 1px solid red;
+    padding: 10px;
+}

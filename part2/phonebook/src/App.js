@@ -10,7 +10,8 @@ const App = () => {
     const [newName, setNewName] = useState("");
     const [newNumber, setNewNumber] = useState("");
     const [newSearch, setNewSearch] = useState("");
-    const [successMessage, setSuccessMessage] = useState(null);
+    const [notificationMessage, setNotificationMessage] = useState(null);
+    const [notificationType, setNotificationType] = useState(null);
 
     useEffect(() => {
         personsService.getAll().then(initialPersons => {
@@ -33,9 +34,12 @@ const App = () => {
                 setPersons(persons.concat(returnedPerson));
                 setNewName("");
                 setNewNumber("");
-                setSuccessMessage(`${newName} was added to the phonebook.`);
+                setNotificationMessage(
+                    `${newName} was added to the phonebook.`
+                );
+                setNotificationType("success");
                 setTimeout(() => {
-                    setSuccessMessage(null);
+                    setNotificationMessage(null);
                 }, 5000);
             });
         } else {
@@ -57,6 +61,23 @@ const App = () => {
                         );
                         setNewName("");
                         setNewNumber("");
+                        setNotificationMessage(
+                            `${newName}'s number has been updated to ${newNumber}.`
+                        );
+                        setNotificationType("success");
+                        setTimeout(() => {
+                            setNotificationMessage(null);
+                        }, 5000);
+                    })
+                    .catch(error => {
+                        setNotificationMessage(
+                            `This entry has already been removed from the phonebook. Cannot edit the number.`
+                        );
+                        setNotificationType("error");
+                        setTimeout(() => {
+                            setNotificationMessage(null);
+                        }, 5000);
+                        setPersons(persons.filter(n => n.id !== id));
                     });
             }
         }
@@ -64,9 +85,28 @@ const App = () => {
 
     const deletePerson = id => {
         if (window.confirm("Do you really want to delete this entry?")) {
-            personsService.deleteEntry(id).then(() => {
-                setPersons(persons.filter(n => n.id !== id));
-            });
+            personsService
+                .deleteEntry(id)
+                .then(() => {
+                    setPersons(persons.filter(n => n.id !== id));
+                    setNotificationMessage(
+                        `Entry has been removed from the phonebook.`
+                    );
+                    setNotificationType("success");
+                    setTimeout(() => {
+                        setNotificationMessage(null);
+                    }, 5000);
+                })
+                .catch(error => {
+                    setNotificationMessage(
+                        `This entry has already been removed from the phonebook.`
+                    );
+                    setNotificationType("error");
+                    setTimeout(() => {
+                        setNotificationMessage(null);
+                    }, 5000);
+                    setPersons(persons.filter(n => n.id !== id));
+                });
         }
     };
 
@@ -88,7 +128,10 @@ const App = () => {
 
     return (
         <div>
-            <Notification message={successMessage} />
+            <Notification
+                message={notificationMessage}
+                type={notificationType}
+            />
             <h2>Phonebook</h2>
             <Filter value={newSearch} onChange={handleSearchChange} />
             <h2>Add new entry</h2>

@@ -23,9 +23,7 @@ const Persons = props => {
             <Entry
                 key={entry.id}
                 entry={entry}
-                handleDeletePerson={e =>
-                    props.handleDeletePersonOf(e, entry.id)
-                }
+                handleDeletePerson={() => props.handleDeletePersonOf(entry.id)}
             />
         ));
     }
