@@ -1,5 +1,6 @@
 import React from "react";
 import Entry from "./Entry";
+import Name from "./Name";
 
 const Countries = props => {
     if (props.newSearch.length > 0) {
@@ -19,7 +20,11 @@ const Countries = props => {
             );
         } else if (isMatch.length <= 10 && isMatch.length > 1) {
             return isMatch.map(entry => (
-                <p key={entry.alpha3Code}>{entry.name}</p>
+                <Name
+                    key={entry.alpha3Code}
+                    showHandler={props.showHandler}
+                    name={entry.name}
+                />
             ));
         } else if (isMatch.length === 1) {
             return isMatch.map(entry => (

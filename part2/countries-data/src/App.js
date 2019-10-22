@@ -13,14 +13,32 @@ function App() {
         });
     }, []);
 
+    const showSpecificCountry = name => {
+        const selectedCountry = countries.filter(function(entry) {
+            return entry.name === name;
+        });
+        setCountries(selectedCountry);
+    };
+
+    const showHandler = name => {
+        showSpecificCountry(name);
+    };
+
     const handleSearchChange = event => {
         setNewSearch(event.target.value);
+        countriesService.getAll().then(initialCountries => {
+            setCountries(initialCountries);
+        });
     };
 
     return (
         <div>
             <Filter value={newSearch} onChange={handleSearchChange} />
-            <Countries newSearch={newSearch} countries={countries} />
+            <Countries
+                newSearch={newSearch}
+                countries={countries}
+                showHandler={showHandler}
+            />
         </div>
     );
 }
