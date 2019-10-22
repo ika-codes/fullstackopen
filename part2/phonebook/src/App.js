@@ -33,7 +33,26 @@ const App = () => {
                 setNewNumber("");
             });
         } else {
-            window.alert(`${newName} is already added to phonebook`);
+            if (
+                window.confirm(
+                    `${newName} is already added to phonebook. Would you like to replace the old number with a new one?`
+                )
+            ) {
+                const person = persons.find(n => n.name === newName);
+                const changedPerson = { ...person, number: newNumber };
+                let id = person.id;
+                personsService
+                    .update(id, changedPerson)
+                    .then(returnedPerson => {
+                        setPersons(
+                            persons.map(person =>
+                                person.id !== id ? person : returnedPerson
+                            )
+                        );
+                        setNewName("");
+                        setNewNumber("");
+                    });
+            }
         }
     };
 
