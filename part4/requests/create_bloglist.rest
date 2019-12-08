@@ -1,0 +1,9 @@
+post http://localhost:3003/api/blogs
+Content-Type: application/json
+
+{
+    "title": "SOLID — Principles of Object-Oriented Design",
+	"author": "Martin Garcia",
+	"url": "https://dev.to/magarcia/solid-principles-of-object-oriented-design-5gh0",
+	"likes": 19
+}
