@@ -92,6 +92,12 @@ describe("most likes", () => {
 		author: "Robert C. Martin",
 		blogs: 3
 	};
+
+	const likesResultExample = {
+		author: "Edsger W. Dijkstra",
+		likes: 17
+	};
+
 	const listWithMoreFavBlogs = [
 		{
 			_id: "5a422a851b54a676234d17f7",
@@ -156,5 +162,10 @@ describe("most likes", () => {
 	test("when the author has the most blogs", () => {
 		const result = listHelper.mostBlogs(listWithMoreFavBlogs);
 		expect(result).toEqual(resultExample);
+	});
+
+	test("when the author has the most likes", () => {
+		const result = listHelper.mostLikes(listWithMoreFavBlogs);
+		expect(result).toEqual(likesResultExample);
 	});
 });
