@@ -36,7 +36,6 @@ test("there is a property under id", async () => {
 	expect(idsInBlogs).toBeDefined();
 });
 
-/*
 test("a valid note can be added ", async () => {
 	const newBlogPost = {
 		_id: "5a422aa71b54a676234d1573",
@@ -58,10 +57,11 @@ test("a valid note can be added ", async () => {
 
 	const contents = response.body.map(r => r.title);
 
-	expect(response.body.length).toBe(initialBlogs.length + 1);
+	expect(response.body.length).toBe(apiHelper.initialBlogs.length + 1);
 	expect(contents).toContain("Go To Statement Considered Harmful");
 });
 
+/*
 test("blog without content is not added", async () => {
 	const newBlog = {
 		author: "Sam Smith"
