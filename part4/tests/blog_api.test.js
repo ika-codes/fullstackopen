@@ -61,6 +61,29 @@ test("a valid note can be added ", async () => {
 	expect(contents).toContain("Go To Statement Considered Harmful");
 });
 
+test("blog without likes returns value 0", async () => {
+	const newBlogPost = {
+		_id: "5a422aa71b54a676234d1573",
+		title: "Go To Statement Considered Harmful",
+		author: "Edsger W. Dijkstra",
+		url:
+			"http://www.u.arizona.edu/~rubinson/copyright_violations/Go_To_Considered_Harmful.html",
+		__v: 0
+	};
+
+	await api
+		.post("/api/blogs")
+		.send(newBlogPost)
+		.expect(201)
+		.expect("Content-Type", /application\/json/);
+
+	const response = await api.get("/api/blogs");
+
+	const contents = response.body.map(r => r.likes);
+
+	expect(contents).toContain(0);
+});
+
 /*
 test("blog without content is not added", async () => {
 	const newBlog = {
