@@ -12,6 +12,17 @@ blogsRouter.get("/", async (request, response, next) => {
 
 blogsRouter.post("/", async (request, response, next) => {
 	const body = request.body;
+
+	if (body.title === undefined) {
+		return response.status(400).json({
+			error: "Title is missing"
+		});
+	} else if (body.author === undefined) {
+		return response.status(400).json({
+			error: "Author is missing"
+		});
+	}
+
 	const blog = new Blog({
 		title: body.title,
 		author: body.author,

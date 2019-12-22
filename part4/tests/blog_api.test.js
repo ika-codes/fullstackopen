@@ -84,7 +84,6 @@ test("blog without likes returns value 0", async () => {
 	expect(contents).toContain(0);
 });
 
-/*
 test("blog without content is not added", async () => {
 	const newBlog = {
 		author: "Sam Smith"
@@ -97,8 +96,8 @@ test("blog without content is not added", async () => {
 
 	const response = await api.get("/api/blogs");
 
-	expect(response.body.length).toBe(initialBlogs.length);
-}); */
+	expect(response.body.length).toBe(apiHelper.initialBlogs.length);
+});
 
 afterAll(() => {
 	mongoose.connection.close();
