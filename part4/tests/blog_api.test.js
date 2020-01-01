@@ -120,6 +120,27 @@ describe("blogs deletion", () => {
 	});
 });
 
+describe("blogs updates", () => {
+	test("Succeeds when providing new likes count", async () => {
+		const updatedBlogPost = {
+			id: "5a422aa71b54a676234d17f8",
+			likes: 10
+		};
+
+		await api
+			.put(`/api/blogs/${updatedBlogPost.id}`)
+			.send(updatedBlogPost)
+			.expect(200)
+			.expect("Content-Type", /application\/json/);
+
+		const response = await api.get("/api/blogs");
+
+		const contents = response.body.map(r => r.likes);
+
+		expect(contents).toContain(10);
+	});
+});
+
 afterAll(() => {
 	mongoose.connection.close();
 });
