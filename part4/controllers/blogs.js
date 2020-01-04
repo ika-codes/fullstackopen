@@ -3,18 +3,6 @@ const Blog = require("../models/blog");
 const User = require("../models/user");
 const jwt = require("jsonwebtoken");
 
-// Token request
-
-const getTokenFrom = request => {
-	const authorization = request.get("authorization");
-
-	if (authorization && authorization.toLowerCase().startsWith("bearer")) {
-		return authorization.substring(7);
-	}
-
-	return null;
-};
-
 // GET requests
 
 blogsRouter.get("/", async (request, response, next) => {
@@ -47,7 +35,7 @@ blogsRouter.get("/:id", async (request, response, next) => {
 
 blogsRouter.post("/", async (request, response, next) => {
 	const body = request.body;
-	const token = getTokenFrom(request);
+	const token = request.token;
 
 	if (body.title === undefined) {
 		return response.status(400).json({
@@ -117,23 +105,5 @@ blogsRouter.delete("/:id", async (request, response, next) => {
 		next(error);
 	}
 });
-
-const errorHandler = (error, request, response, next) => {
-	console.error(error.message);
-
-	if (error.name === "CastError" && error.kind === "ObjectId") {
-		return response.status(400).send({ error: "malformatted id" });
-	} else if (error.name === "ValidationError") {
-		return response.status(400).json({ error: error.message });
-	} else if (error.name === "JsonWebTokenError") {
-		return response.status(401).json({
-			error: "invalid token"
-		});
-	}
-
-	next(error);
-};
-
-blogsRouter.use(errorHandler);
 
 module.exports = blogsRouter;
