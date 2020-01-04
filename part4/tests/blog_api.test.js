@@ -2,6 +2,7 @@ const mongoose = require("mongoose");
 const supertest = require("supertest");
 const app = require("../app");
 const Blog = require("../models/blog");
+const User = require("../models/user");
 const apiHelper = require("./api_helper");
 
 const api = supertest(app);
@@ -14,6 +15,14 @@ beforeEach(async () => {
 
 	blogObject = new Blog(apiHelper.initialBlogs[1]);
 	await blogObject.save();
+
+	await User.deleteMany({});
+	const user = new User({
+		username: "root",
+		name: "Weronika",
+		password: "sekret"
+	});
+	await user.save();
 });
 
 describe("initial checks for blogs", () => {
@@ -40,6 +49,8 @@ describe("initial checks for blogs", () => {
 
 describe("blogs addition", () => {
 	test("a valid blog can be added ", async () => {
+		const usersAtEnd = await apiHelper.usersInDb();
+
 		const newBlogPost = {
 			_id: "5a422aa71b54a676234d1573",
 			title: "Go To Statement Considered Harmful",
@@ -47,7 +58,8 @@ describe("blogs addition", () => {
 			url:
 				"http://www.u.arizona.edu/~rubinson/copyright_violations/Go_To_Considered_Harmful.html",
 			likes: 5,
-			__v: 0
+			__v: 0,
+			userId: usersAtEnd[0].id
 		};
 
 		await api
@@ -65,13 +77,16 @@ describe("blogs addition", () => {
 	});
 
 	test("blog without likes returns value 0", async () => {
+		const usersAtEnd = await apiHelper.usersInDb();
+
 		const newBlogPost = {
 			_id: "5a422aa71b54a676234d1573",
 			title: "Go To Statement Considered Harmful",
 			author: "Edsger W. Dijkstra",
 			url:
 				"http://www.u.arizona.edu/~rubinson/copyright_violations/Go_To_Considered_Harmful.html",
-			__v: 0
+			__v: 0,
+			userId: usersAtEnd[0].id
 		};
 
 		await api
