@@ -1,10 +1,10 @@
 post http://localhost:3003/api/blogs
 Content-Type: application/json
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRva2VudGVzdCIsImlkIjoiNWUxMGJmNTg0NzM1Yzc0OGI4MjNiNGFlIiwiaWF0IjoxNTc4MTU2NDUyfQ.3u7CFf9J1pqRM5a3E7ywTz4xGVrd_Kl2wUC-WqCbT1w
 
 {
-    "title": "SOLID — Principles of Object-Oriented Design",
+    "title": "Testibng Token Authorization",
 	"author": "Martin Garcia",
-	"url": "https://dev.to/magarcia/solid-principles-of-object-oriented-design-5gh0",
-	"likes": 19,
-	"userId": "5e108b0fcf580f70b8c97e91"
+	"url": "https://dev.to/",
+	"likes": 13
 }
