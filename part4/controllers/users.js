@@ -19,21 +19,44 @@ usersRouter.post("/", async (request, response, next) => {
 	try {
 		const body = request.body;
 
-		const saltRounds = 10;
-		const passwordHash = await bcrypt.hashSync(body.password, saltRounds);
+		if (body.password && body.password.length > 2) {
+			const saltRounds = 10;
+			const passwordHash = await bcrypt.hashSync(
+				body.password,
+				saltRounds
+			);
 
-		const user = new User({
-			username: body.username,
-			name: body.name,
-			passwordHash
-		});
+			const user = new User({
+				username: body.username,
+				name: body.name,
+				passwordHash
+			});
 
-		const savedUser = await user.save();
+			const savedUser = await user.save();
 
-		response.json(savedUser);
-	} catch (exception) {
-		next(exception);
+			response.json(savedUser);
+		} else {
+			return response
+				.status(400)
+				.send({ error: "Password not entered or too short." });
+		}
+	} catch (error) {
+		next(error);
 	}
 });
+
+const errorHandler = (error, request, response, next) => {
+	console.error(error.message);
+
+	if (error.name === "CastError" && error.kind === "ObjectId") {
+		return response.status(400).send({ error: "malformatted id" });
+	} else if (error.name === "ValidationError") {
+		return response.status(400).json({ error: error.message });
+	}
+
+	next(error);
+};
+
+usersRouter.use(errorHandler);
 
 module.exports = usersRouter;

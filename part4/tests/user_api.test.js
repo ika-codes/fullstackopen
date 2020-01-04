@@ -9,7 +9,11 @@ const api = supertest(app);
 describe("when there is initially one user at db", () => {
 	beforeEach(async () => {
 		await User.deleteMany({});
-		const user = new User({ username: "root", password: "sekret" });
+		const user = new User({
+			username: "root",
+			name: "Weronika",
+			password: "sekret"
+		});
 		await user.save();
 	});
 
@@ -33,6 +37,77 @@ describe("when there is initially one user at db", () => {
 
 		const usernames = usersAtEnd.map(u => u.username);
 		expect(usernames).toContain(newUser.username);
+	});
+
+	test("cannot create duplicate user", async () => {
+		const usersAtStart = await apiHelper.usersInDb();
+
+		const newUser = {
+			username: "root",
+			name: "Matti Luukkainen",
+			password: "salainen"
+		};
+
+		await api
+			.post("/api/users")
+			.send(newUser)
+			.expect(400)
+			.expect("Content-Type", /application\/json/);
+
+		const usersAtEnd = await apiHelper.usersInDb();
+		expect(usersAtEnd.length).toBe(usersAtStart.length);
+	});
+
+	test("cannot create user without username", async () => {
+		const usersAtStart = await apiHelper.usersInDb();
+
+		const newUser = {
+			name: "Matti Luukkainen",
+			password: "salainen"
+		};
+
+		await api
+			.post("/api/users")
+			.send(newUser)
+			.expect(400);
+
+		const usersAtEnd = await apiHelper.usersInDb();
+		expect(usersAtEnd.length).toBe(usersAtStart.length);
+	});
+
+	test("cannot create user without password", async () => {
+		const usersAtStart = await apiHelper.usersInDb();
+
+		const newUser = {
+			username: "root",
+			name: "Matti Luukkainen"
+		};
+
+		await api
+			.post("/api/users")
+			.send(newUser)
+			.expect(400);
+
+		const usersAtEnd = await apiHelper.usersInDb();
+		expect(usersAtEnd.length).toBe(usersAtStart.length);
+	});
+
+	test("cannot create user with username shorter than 3 characters", async () => {
+		const usersAtStart = await apiHelper.usersInDb();
+
+		const newUser = {
+			username: "ha",
+			name: "Matti Luukkainen",
+			password: "salainen"
+		};
+
+		await api
+			.post("/api/users")
+			.send(newUser)
+			.expect(400);
+
+		const usersAtEnd = await apiHelper.usersInDb();
+		expect(usersAtEnd.length).toBe(usersAtStart.length);
 	});
 });
 
